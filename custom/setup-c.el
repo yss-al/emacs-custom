@@ -17,16 +17,17 @@
 ;; “python”: What Python developers use for extension modules
 ;; “java”: The default style for java-mode (see below)
 ;; “user”: When you want to define your own style
-(setq c-default-style) "linux" ;; set style to "linux"
+;;(setq c-default-style) "linux" ;; set style to "linux"
 
 (require 'google-c-style)
 (add-hook 'c-mode-common-hook 'google-set-c-style)
 ;;代码缩进风格控制
-(defun my-c-mode-hook ()
-  (setq c-basic-offset 4
-        indent-tabs-mode nil
-        default-tab-width 4))
-(add-hook 'c-mode-hook 'my-c-mode-hook)
+;;(defun my-c-mode-hook ()
+;;  (setq c-basic-offset 4
+;;        indent-tabs-mode nil
+;;        default-tab-width 4))
+;;(add-hook 'c-mode-hook 'my-c-mode-hook)
+(add-hook 'c-mode-hook 'google-set-c-style)
 
 (use-package cc-mode
   :init
