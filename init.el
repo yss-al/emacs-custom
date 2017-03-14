@@ -23,6 +23,8 @@
 (require 'setup-cedet)
 (require 'setup-editing)
 (require 'setup-c)
+(require 'multi-term)
+(setq multi-term-program "/bin/bash")
 
 
 ;; function-args
@@ -38,15 +40,20 @@
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
-   ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff" "#eeeeec"])
- '(custom-enabled-themes (quote (manoj-dark)))
+   ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(auto-save-default nil)
+ '(c-default-style
+   (quote
+    ((java-mode . "java")
+     (awk-mode . "awk")
+     (other . "gnu"))))
+ '(custom-enabled-themes (quote (manoj-dark)))
  '(electric-pair-mode t)
  '(global-linum-mode t)
  '(make-backup-files nil)
  '(package-selected-packages
    (quote
-    (sr-speedbar google-c-style company-c-headers zygospore ggtags yasnippet ws-butler volatile-highlights use-package undo-tree iedit dtrt-indent counsel-projectile company clean-aindent-mode anzu))))
+    (multi-term nasm-mode magit htmlize sr-speedbar google-c-style company-c-headers zygospore ggtags yasnippet ws-butler volatile-highlights use-package undo-tree iedit dtrt-indent counsel-projectile company clean-aindent-mode anzu))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
