@@ -197,8 +197,8 @@ Packages used in this specific configuration. You may want to adapt this list. T
         consult-recoll      ; Consult interface for recoll query
         org-auto-tangle     ; Tangle org file when it is saved
         exec-path-from-shell; Get environment variables such as $PATH from the shell 
-        which-key))         ; Display available keybindings in popup
-
+        which-key           ; Display available keybindings in popup
+        auctex-latexmk))    ; Auctex latexmk
 ;; Install packages that are not yet installed
 (dolist (package package-list)
   (straight-use-package package))
@@ -267,6 +267,9 @@ My personal packages
 (straight-use-package
  '(org-imenu :type git :host github :repo "rougier/org-imenu"))
 
+(use-package tex
+  :straight auctex)
+
 ;; pdf-drop-mode
 (straight-use-package
  '(pdf-drop-mode :type git :host github :repo "rougier/pdf-drop-mode"))
@@ -277,6 +280,7 @@ My personal packages
   '(org-bib :type git :host github :branch "org-imenu" :repo "rougier/org-bib-mode"))
 
 #+end_src
+
 ** Startup
 
 Emacs does a lot of things at startup and here, we disable pretty much everything.
@@ -295,7 +299,8 @@ Emacs does a lot of things at startup and here, we disable pretty much everythin
 We'll use the [[help:bind-key][bind-key]] function (from use-package) for bindings. Then we can use [[help:describe-personal-keybindings][describe-personal-keybindings]] to check for personal bindings.
 
 #+begin_src emacs-lisp
-
+(require 'auctex-latexmk)
+(auctex-latexmk-setup)
 ;; (require 'bind-key)
 
 #+end_src
@@ -510,6 +515,9 @@ Server start.
 
 #+end_src
 
+#+RESULTS:
+| 25415 | 31270 | 102657 | 0 |
+
 Some functions that are used throughout this configuration.
 
 ** String related
@@ -529,6 +537,9 @@ A set of functions to join two strings such as to fit a given width. This will b
 
 #+end_src
 
+#+RESULTS: my/string-pad-right
+: my/string-pad-right
+
 #+name: my/string-pad-left
 #+begin_src emacs-lisp
 
@@ -541,6 +552,9 @@ A set of functions to join two strings such as to fit a given width. This will b
     (concat (make-string (max 0 (- len (length s))) ?\ ) s)))
 
 #+end_src
+
+#+RESULTS: my/string-pad-left
+: my/string-pad-left
 
 #+name: my/string-join
 #+begin_src emacs-lisp
@@ -572,6 +586,9 @@ between them. If len is negative, it is retrieved from current window width."
 
 #+end_src
 
+#+RESULTS: my/string-join
+: my/string-join
+
 ** Date related
 
 A set of date related functions, mostly used for mail display.
@@ -586,6 +603,9 @@ A set of date related functions, mostly used for mail display.
 
 #+end_src
 
+#+RESULTS: my/date-day
+: my/date-day
+
 #+name: my/date-month
 #+begin_src emacs-lisp
 
@@ -595,6 +615,9 @@ A set of date related functions, mostly used for mail display.
   (nth 4 (decode-time date)))
 
 #+end_src
+
+#+RESULTS: my/date-month
+: my/date-month
   
 #+name: my/date-year
 #+begin_src emacs-lisp
@@ -605,6 +628,9 @@ A set of date related functions, mostly used for mail display.
   (nth 5 (decode-time date)))
 
 #+end_src
+
+#+RESULTS: my/date-year
+: my/date-year
 
 #+name: my/date-equal
 #+begin_src emacs-lisp
@@ -620,6 +646,9 @@ A set of date related functions, mostly used for mail display.
            (my/date-year date2))))
 
 #+end_src
+
+#+RESULTS: my/date-equal
+: my/date-equal
 
 #+name: my/date-inc
 #+begin_src emacs-lisp
@@ -637,6 +666,9 @@ A set of date related functions, mostly used for mail display.
 
 #+end_src
 
+#+RESULTS: my/date-inc
+: my/date-inc
+
 #+name: my/date-dec
 #+begin_src emacs-lisp
 
@@ -650,6 +682,9 @@ A set of date related functions, mostly used for mail display.
 
 #+end_src
 
+#+RESULTS: my/date-dec
+: my/date-dec
+
 #+name: my/date-today
 #+begin_src emacs-lisp
 
@@ -659,6 +694,9 @@ A set of date related functions, mostly used for mail display.
   (current-time))
 
 #+end_src
+
+#+RESULTS: my/date-today
+: my/date-today
 
 #+name: my/date-is-today
 #+begin_src emacs-lisp
@@ -670,6 +708,9 @@ A set of date related functions, mostly used for mail display.
 
 #+end_src
 
+#+RESULTS: my/date-is-today
+: my/date-is-today
+
 #+name: my/date-is-yesterday
 #+begin_src emacs-lisp
 
@@ -679,6 +720,9 @@ A set of date related functions, mostly used for mail display.
   (my/date-equal (my/date-dec (my/date-today) 1) date))
 
 #+end_src
+
+#+RESULTS: my/date-is-yesterday
+: my/date-is-yesterday
 
 #+name: my/date-relative
 #+begin_src emacs-lisp
@@ -698,6 +742,9 @@ A set of date related functions, mostly used for mail display.
           (t                            (format-time-string "%d %b %Y" date)))))
 
 #+end_src
+
+#+RESULTS: my/date-relative
+: my/date-relative
 
 ** Mini frame
 
@@ -764,6 +811,9 @@ can be also specified."
 
 #+end_src
 
+#+RESULTS:
+: my/mini-frame
+
 #+begin_src emacs-lisp
 
 (defun my/mini-frame-reset (frame)
@@ -790,6 +840,9 @@ can be also specified."
 
 #+end_src
 
+#+RESULTS:
+: my/mini-frame-reset
+
 #+begin_src emacs-lisp
 
 (defun my/mini-frame-shrink (frame &optional delta)
@@ -808,6 +861,9 @@ can be also specified."
 
 #+end_src
 
+#+RESULTS:
+: my/mini-frame-shrink
+
 ** Mu4e related
 
 A set of mail (mu4e) related functions.
@@ -824,6 +880,9 @@ A set of mail (mu4e) related functions.
 
 #+end_src
 
+#+RESULTS: my/mu4e-get-account
+: my/mu4e-get-account
+
 #+name: my/mu4e-get-maildir
 #+begin_src emacs-lisp
 
@@ -836,6 +895,9 @@ A set of mail (mu4e) related functions.
 
 #+end_src
 
+#+RESULTS: my/mu4e-get-maildir
+: my/mu4e-get-maildir
+
 #+name: my/mu4e-get-mailbox
 #+begin_src emacs-lisp
 
@@ -845,6 +907,9 @@ A set of mail (mu4e) related functions.
   (format "%s - %s" (mu4e-get-account msg) (mu4e-get-maildir msg)))
 
 #+end_src
+
+#+RESULTS: my/mu4e-get-mailbox
+: my/mu4e-get-mailbox
 
 #+name: my/mu4e-get-sender
 #+begin_src emacs-lisp
@@ -856,6 +921,9 @@ A set of mail (mu4e) related functions.
       (mu4e~headers-contact-str (mu4e-message-field msg :from))))
 
 #+end_src
+
+#+RESULTS: my/mu4e-get-sender
+: my/mu4e-get-sender
 
 ** Configuration :BINDING:HOOK:DEFER:
 :PROPERTIES:
@@ -925,6 +993,9 @@ This defines an org sidebar using imenu-list.
 
 #+end_src
 
+#+RESULTS: my/org-sidebar
+: my/org-sidebar
+
 This toggles the org-sidebar.
 
 #+name: org-sidebar-toggle
@@ -942,6 +1013,9 @@ This toggles the org-sidebar.
 
 #+end_src
 
+#+RESULTS: org-sidebar-toggle
+: my/org-sidebar-toggle
+
 Make sure tangle is applied to the base buffer and not the subtree.
 
 #+name: my/org-babel-tangle
@@ -956,6 +1030,9 @@ Make sure tangle is applied to the base buffer and not the subtree.
     (org-babel-tangle)))
 
 #+end_src
+
+#+RESULTS: my/org-babel-tangle
+: my/org-babel-tangle
 
 
 Toggle code blocks folding, starting folded.
@@ -977,6 +1054,9 @@ Toggle code blocks folding, starting folded.
 (add-hook 'config-mode-hook #'my/org-toggle-blocks)
 
 #+end_src
+
+#+RESULTS: my/org-toggle-blocks
+| my/org-toggle-blocks |
 
 
 #+begin_src emacs-lisp
@@ -1001,6 +1081,9 @@ Toggle code blocks folding, starting folded.
 
 #+end_src
 
+#+RESULTS:
+: my/imenu-list-toggle-folding
+
 Some information for when a top node is closed
 
 #+begin_src emacs-lisp
@@ -1017,6 +1100,9 @@ Some information for when a top node is closed
 (setq hs-set-up-overlay #'my/display-code-line-counts)
 
 #+end_src
+
+#+RESULTS:
+: my/display-code-line-counts
 
 #+begin_src emacs-lisp
 
@@ -1043,6 +1129,9 @@ Some information for when a top node is closed
 
 #+end_src
 
+#+RESULTS:
+: my/imenu-list-ret-dwim
+
 *** Filter :BINDING:
 
 This provide the ~my/org-imenu-filter~ that allow to filter sidebar entries using the specified expression (e.g. "+HOOK +DEFER").
@@ -1055,6 +1144,9 @@ This provide the ~my/org-imenu-filter~ that allow to filter sidebar entries usin
 
 #+end_src
 
+#+RESULTS:
+: imenu-list-refresh
+
 3 levels for org-imenu
 
 #+begin_src emacs-lisp
@@ -1062,6 +1154,9 @@ This provide the ~my/org-imenu-filter~ that allow to filter sidebar entries usin
 (setq org-imenu-depth 3)
 
 #+end_src
+
+#+RESULTS:
+: 3
 
 
 #+begin_src emacs-lisp
@@ -1145,6 +1240,8 @@ This provide the ~my/org-imenu-filter~ that allow to filter sidebar entries usin
 
 #+end_src
 
+#+RESULTS:
+
 *** Configuration mode
 
 This section defines the ~my/config-mode~ to ease navigating and interacting with the configuration file.
@@ -1191,6 +1288,9 @@ Navigation commands using the ilist menu.
 
 #+end_src
 
+#+RESULTS:
+: my/config-mode-next-section
+
 A minor mode for configuration
 
 #+name: config-mode
@@ -1218,6 +1318,9 @@ A minor mode for configuration
 
 #+end_src
 
+#+RESULTS: config-mode
+: (keymap (67108960 . my/org-sidebar-toggle) (3 keymap (116 . my/org-toggle-blocks) (22 keymap (116 . my/org-babel-tangle)) (33554446 . my/config-mode-next-section) (33554448 . my/config-mode-prev-section) (14 . my/config-mode-next-header) (16 . my/config-mode-prev-header)))
+
 A shortcut to edit configuration
 
 #+begin_src emacs-lisp :prologue "" :epilogue ""
@@ -1233,6 +1336,9 @@ A shortcut to edit configuration
 
 #+end_src
 
+#+RESULTS:
+: my/config
+
 An autoload function for my/config (that will load org mode).
 
 #+begin_src emacs-lisp :prologue "" :epilogue ""
@@ -1243,6 +1349,8 @@ An autoload function for my/config (that will load org mode).
   t)
 
 #+end_src
+
+#+RESULTS:
 
 *** Bugfix :BUGFIX:
 
@@ -1267,6 +1375,8 @@ See https://list.orgmode.org/CA+G3_PNrdhx0Ejzw8UO7DgZ+ju1B7Ar_eTch5MMViEpKGwqq3w
 
 #+end_src
 
+#+RESULTS: org-babel-expand-body:emacs-lisp
+
 *** Auto-tangle
 
 Automatically tangle org-mode files with the option #+auto_tangle: t
@@ -1276,6 +1386,10 @@ Automatically tangle org-mode files with the option #+auto_tangle: t
 (add-hook 'org-mode-hook 'org-auto-tangle-mode)
 
 #+end_src
+
+#+RESULTS:
+| org-tempo-setup | my/org-mode-hook | org-auto-tangle-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-fold-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] |
+
 ** Benchmark
 
 #+begin_src emacs-lisp
@@ -1283,6 +1397,9 @@ Automatically tangle org-mode files with the option #+auto_tangle: t
 (my/report-time "Personal library")
 
 #+end_src
+
+#+RESULTS:
+: Personal library section time:       0.33s
 
 
 * Interface
@@ -3779,7 +3896,6 @@ A shortcut for emacs-lisp source blocks. Type "<S" (in org-mode) then press tab.
 ** Babel
 
 #+begin_src emacs-lisp
-
 (setq-default org-src-fontify-natively t         ; Fontify code in code blocks.
               org-adapt-indentation nil          ; Adaptive indentation
               org-src-tab-acts-natively t        ; Tab acts as in source editing
@@ -3788,6 +3904,29 @@ A shortcut for emacs-lisp source blocks. Type "<S" (in org-mode) then press tab.
               org-fontify-whole-block-delimiter-line t) ; Fontify whole block
 
 #+end_src
+
+** Latex
+
+#+begin_src emacs-lisp
+(with-eval-after-load 'org
+(add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
+)
+
+(with-eval-after-load 'ox-latex
+  (add-to-list 'org-latex-classes
+               '("ctexart" "\\documentclass[11pt]{ctexart}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  (setq org-latex-default-class "ctexart")
+  (setq org-latex-compiler "xelatex")
+  (setq org-latex-toc-command "\\tableofcontents \\clearpage"))
+#+end_src
+
+#+RESULTS:
+| (lambda nil (add-to-list 'TeX-command-list '(XeLaTeX %`xelatex%(mode)%' %t TeX-run-TeX nil t)) (setq TeX-command-default XeLaTeX)) | preview-mode-setup |
 
 ** Benchmark
 
@@ -4414,7 +4553,7 @@ Finally, we disable [[help:org-agenda-show-outline-path][org-agenda-show-outline
 #+header: :prologue "" :epilogue ""
 #+begin_src emacs-lisp
 
-(bind-key "C-c n" #'nano-agenda)
+(bind-key "C-c n a" #'nano-agenda)
 
 #+end_src
 
@@ -4629,9 +4768,9 @@ Samplet configuration from https://protesilaos.com/emacs/denote
 
 ;; You will not need to `require' all those individually once the
 ;; package is available.
-(require 'denote-retrieve)
-(require 'denote-link)
-(require 'denote-dired)
+;; (require 'denote-retrieve)
+;; (require 'denote-link)
+;; (require 'denote-dired)
 (setq denote-dired-rename-expert nil)
 
 ;; We use different ways to specify a path for demo purposes.
@@ -4677,7 +4816,6 @@ Samplet configuration from https://protesilaos.com/emacs/denote
   (define-key map (kbd "C-c n r") #'denote-dired-rename-file))
 
 (with-eval-after-load 'org-capture
-  (require 'denote-org-capture)
   (setq denote-org-capture-specifiers "%l\n%i\n%?")
   (add-to-list 'org-capture-templates
                '("n" "New note (with denote.el)" plain
